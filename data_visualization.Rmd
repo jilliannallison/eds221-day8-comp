@@ -107,10 +107,16 @@ Create scatterplots, faceted by species common name, for total length versus wei
 ggplot(data = lizards, 
        aes(x = total_length,
            y = weight)) + 
-  geom_point(aes(color = common_name, 
-                 shape = common_name)) + 
+  geom_point(aes(color = common_name),
+             alpha = 0.6,
+             size = 1) + 
   facet_wrap(~common_name, 
              scales = "free") +
+  labs(x = "Total Length (mm)", 
+       y = "Weight (g)",
+       title = "Jornada Basin Lizard Sizes",
+       subtitle = "all lizards follow the standard length weight relationship with Western Whiptails being largest",
+       caption = "Data: Jornada Basin LTER, CCBY")
   theme_minimal()
 ```
 
