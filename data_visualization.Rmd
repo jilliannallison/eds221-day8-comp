@@ -249,3 +249,52 @@ ggplot(data = jornada_veg) +
 
 ```
 
+## Day 10 stuff! 
+### Make a heat map 
+```{r}
+lizard_counts <- lizards %>% 
+  mutate(date = lubridate::mdy(date)) %>%
+  count(year = lubridate::year(date), common_name) %>% # for each year of the dataset, i have the count for each lizard species 
+  drop_na() 
+```
+
+```{r}
+ggplot(data = lizard_counts, aes(x = year, y = common_name)) + 
+  geom_tile(aes(fill = n), show.legend = FALSE) + 
+  geom_text(aes(label = n), color = "white", size = 3) + 
+  scale_fill_gradientn(colors = c("navy","red","orange")) + 
+  theme_minimal() 
+```
+
+### Beeswarm plot
+
+```{r}
+whiptails <- lizards %>%
+  filter(common_name == "western whiptail") %>%
+  drop_na(total_length, weight)
+```
+
+```{r}
+whiptail_bee <- ggplot(data = whiptails, 
+       aes(x = sex, 
+           y = weight)) + 
+  ggbeeswarm::geom_beeswarm(size = 0.5) + 
+  geom_boxplot(fill = NA)
+```
+
+```{r}
+whiptail_plot <- ggplot(data = whiptails, 
+       aes(x = total_length, 
+           y = weight)) + 
+  geom_point(aes(color = sex)) + 
+  theme(legend.position = "bottom")
+
+ggMarginal(whiptail_plot, type = "boxplot", groupColour = TRUE)
+```
+
+
+### Patchwork -- addition creates columns, division creates rows 
+```{r}
+((whiptail_bee + whiptail_plot) / whiptail_bee) + whiptail_plot
+```
+
